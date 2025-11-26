@@ -1,0 +1,54 @@
+import { createContext, useContext, useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
+import { loadSettings, saveSettings } from '../lib/db'
+import type { UserSettings } from '../types'
+
+export const defaultSettings: UserSettings = {
+  showOrderTime: false,
+  showTips: true,
+  showInfoServiceCost: false,
+  showRentPercent: true,
+  showMedicMechanic: false,
+  includeRentInProfit: true,
+  colorScheme: 'light',
+  accentColor: 'cyan',
+}
+
+type SettingsContextValue = {
+  settings: UserSettings
+  updateSettings: (next: Partial<UserSettings>) => void
+  ready: boolean
+}
+
+const SettingsContext = createContext<SettingsContextValue | null>(null)
+
+export function SettingsProvider({ children }: { children: ReactNode }) {
+  const [settings, setSettings] = useState<UserSettings>(defaultSettings)
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    loadSettings()
+      .then((stored) => {
+        if (stored) {
+          setSettings(stored)
+        }
+      })
+      .finally(() => setReady(true))
+  }, [])
+
+  const updateSettings = (next: Partial<UserSettings>) => {
+    setSettings((prev) => {
+      const updated = { ...prev, ...next }
+      saveSettings(updated)
+      return updated
+    })
+  }
+
+  return <SettingsContext.Provider value={{ settings, updateSettings, ready }}>{children}</SettingsContext.Provider>
+}
+
+export function useSettings() {
+  const ctx = useContext(SettingsContext)
+  if (!ctx) throw new Error('useSettings must be used inside SettingsProvider')
+  return ctx
+}

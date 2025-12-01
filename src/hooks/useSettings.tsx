@@ -12,6 +12,11 @@ export const defaultSettings: UserSettings = {
   includeRentInProfit: true,
   colorScheme: 'light',
   accentColor: 'cyan',
+  // Тарифы по умолчанию
+  defaultRentPercent: 3,
+  defaultInfoServiceCost: 300,
+  defaultMedicCost: 500,
+  defaultMechanicCost: 1000,
 }
 
 type SettingsContextValue = {
@@ -30,7 +35,16 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     loadSettings()
       .then((stored) => {
         if (stored) {
-          setSettings(stored)
+          // Мигрировать старые настройки с новыми дефолтными значениями
+          const migratedSettings = {
+            ...defaultSettings,
+            ...stored,
+          }
+          setSettings(migratedSettings)
+          // Сохранить мигрированные настройки
+          if (!stored.defaultRentPercent) {
+            saveSettings(migratedSettings)
+          }
         }
       })
       .finally(() => setReady(true))

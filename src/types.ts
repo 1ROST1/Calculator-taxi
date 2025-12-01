@@ -36,6 +36,11 @@ export type UserSettings = {
   includeRentInProfit: boolean
   colorScheme: 'light' | 'dark'
   accentColor: 'cyan' | 'teal' | 'green' | 'blue'
+  // Тарифы по умолчанию
+  defaultRentPercent: number
+  defaultInfoServiceCost: number
+  defaultMedicCost: number
+  defaultMechanicCost: number
 }
 
 export type DayRecord = DayExtras & {
@@ -45,4 +50,20 @@ export type DayRecord = DayExtras & {
   totals: CalculationResult
   notes?: string
   createdAt: number
+}
+
+export type ApiToken = {
+  access_token: string
+  token_type: string
+}
+
+export type ApiUser = {
+  id: number
+  email: string
+  created_at: number
+}
+
+export type AuthPayload = {
+  token: ApiToken
+  user: ApiUser
 }

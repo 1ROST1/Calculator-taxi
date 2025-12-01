@@ -107,13 +107,11 @@ export function App() {
       <Notifications position="top-center" limit={1} autoClose={2000} />
       <BrowserRouter>
         <AppShell
-          header={{ height: 64 }}
-          footer={{ height: 80 }}
+          header={{ height: 70 }}
           padding={0}
           styles={{
             main: {
-              paddingTop: 64,
-              paddingBottom: 80,
+              paddingTop: 70,
             },
           }}
         >

@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -23,11 +23,13 @@ body {
 }
 
 html[data-mantine-color-scheme='light'] body {
-  background: #f5f5f5;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  background-attachment: fixed;
 }
 
 html[data-mantine-color-scheme='dark'] body {
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  background-attachment: fixed;
 }
 
 a {
@@ -55,4 +57,96 @@ input[type='number'] {
 button {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Глобальные стили для карточек */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+html[data-mantine-color-scheme='dark'] .glass-card {
+  background: rgba(26, 26, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Эффект hover для интерактивных элементов */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+html[data-mantine-color-scheme='dark'] .hover-lift:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }

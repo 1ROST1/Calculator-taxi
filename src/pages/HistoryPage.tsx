@@ -1,19 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Container as BSContainer, Row, Col } from 'react-bootstrap'
 import {
-  Container,
-  Stack,
   Text,
-  Paper,
-  Group,
   Badge,
   ActionIcon,
   Modal,
   Box,
   Button,
   Divider,
-  UnstyledButton,
+  Stack,
+  Group,
+  Paper,
 } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
 import {
   IconTrash,
   IconEye,
@@ -28,10 +26,9 @@ import {
 import { formatCurrency, formatDate } from '../lib/format'
 import { deleteDay, listDays } from '../lib/db'
 import type { DayRecord } from '../types'
+import './HistoryPage.css'
 
 export function HistoryPage() {
-  const isMobile = useMediaQuery('(max-width: 767px)')
-  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)')
   const [days, setDays] = useState<DayRecord[]>([])
   const [selected, setSelected] = useState<DayRecord | null>(null)
   const [hoverStates, setHoverStates] = useState<Record<string, boolean>>({})
@@ -66,530 +63,343 @@ export function HistoryPage() {
   }
 
   return (
-    <Container size="md" p={isMobile ? 'sm' : isTablet ? 'md' : 'lg'}>
-      <Stack gap={isMobile ? 'lg' : 'xl'}>
-        {/* Gradient Header */}
-        <Box className="animate-fade-in">
-          <Text
-            size={isMobile ? '28px' : isTablet ? '36px' : '42px'}
-            fw={900}
-            mb={isMobile ? 4 : 8}
-            style={{
-              background: 'linear-gradient(135deg, #12b886 0%, #15aabf 50%, #228be6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            История смен
-          </Text>
-          <Text size="md" c="dimmed" fw={500}>
-            Все ваши сохраненные смены и статистика
-          </Text>
-        </Box>
-
-        {/* Summary Stats Cards */}
-        <Box className="animate-scale-in" style={{ animationDelay: '0.1s', animationFillMode: 'both' }}>
-          <Paper
-            radius="24px"
-            p="xl"
-            style={{
-              position: 'relative',
-              overflow: 'hidden',
-              background: 'linear-gradient(135deg, #12b886 0%, #0ca678 50%, #099268 100%)',
-              boxShadow: '0 20px 60px rgba(18, 184, 134, 0.35)',
-              border: 'none',
-            }}
-          >
-            {/* Decorative blur elements */}
-            <Box
-              style={{
-                position: 'absolute',
-                top: '-50%',
-                right: '-10%',
-                width: '300px',
-                height: '300px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.15)',
-                filter: 'blur(80px)',
-              }}
-            />
-            <Box
-              style={{
-                position: 'absolute',
-                bottom: '-30%',
-                left: '-5%',
-                width: '200px',
-                height: '200px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.1)',
-                filter: 'blur(60px)',
-              }}
-            />
-
-            <Stack gap="xl" style={{ position: 'relative', zIndex: 1 }}>
-              <Group justify="space-between" align="flex-start">
-                <Box>
-                  <Group gap="xs" mb={4}>
-                    <Box
-                      style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '12px',
-                        background: 'rgba(255, 255, 255, 0.2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <IconChartLine size={24} color="white" />
-                    </Box>
-                    <Text size="sm" c="rgba(255, 255, 255, 0.85)" fw={600} tt="uppercase">
-                      Общая прибыль
-                    </Text>
-                  </Group>
-                  <Text size="48px" fw={900} c="white" style={{ lineHeight: 1.1 }}>
-                    {formatCurrency(summary.profit)}
-                  </Text>
-                </Box>
-
-                <Group gap="xl">
-                  <Box ta="center">
-                    <Text size="xs" c="rgba(255, 255, 255, 0.75)" fw={700} tt="uppercase" mb={4}>
-                      Смен
-                    </Text>
-                    <Text size="28px" fw={900} c="white">
-                      {days.length}
-                    </Text>
-                  </Box>
-                  <Box ta="center">
-                    <Text size="xs" c="rgba(255, 255, 255, 0.75)" fw={700} tt="uppercase" mb={4}>
-                      Заказов
-                    </Text>
-                    <Text size="28px" fw={900} c="white">
-                      {summary.orders}
-                    </Text>
-                  </Box>
-                </Group>
-              </Group>
-
-              <Group grow>
-                {/* Cash Card */}
-                <Box
-                  style={{
-                    borderRadius: '16px',
-                    padding: '20px',
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                  }}
-                >
-                  <Group gap="xs" mb={8}>
-                    <Box
-                      style={{
-                        width: '36px',
-                        height: '36px',
-                        borderRadius: '10px',
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15))',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <IconCash size={20} color="white" />
-                    </Box>
-                    <Text size="xs" c="rgba(255, 255, 255, 0.85)" fw={700} tt="uppercase">
-                      Наличные
-                    </Text>
-                  </Group>
-                  <Text size="24px" fw={900} c="white">
-                    {formatCurrency(summary.cash)}
-                  </Text>
-                </Box>
-
-                {/* Card Card */}
-                <Box
-                  style={{
-                    borderRadius: '16px',
-                    padding: '20px',
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                  }}
-                >
-                  <Group gap="xs" mb={8}>
-                    <Box
-                      style={{
-                        width: '36px',
-                        height: '36px',
-                        borderRadius: '10px',
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15))',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <IconCreditCard size={20} color="white" />
-                    </Box>
-                    <Text size="xs" c="rgba(255, 255, 255, 0.85)" fw={700} tt="uppercase">
-                      Безналичные
-                    </Text>
-                  </Group>
-                  <Text size="24px" fw={900} c="white">
-                    {formatCurrency(summary.card)}
-                  </Text>
-                </Box>
-              </Group>
-            </Stack>
-          </Paper>
-        </Box>
-
-        {/* Days List */}
-        {!days.length ? (
-          <Box
-            className="animate-fade-in"
-            style={{
-              animationDelay: '0.2s',
-              animationFillMode: 'both',
-            }}
-          >
-            <Paper
-              radius="20px"
-              p="60px"
-              style={{
-                background: 'rgba(255, 255, 255, 0.7)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(0, 0, 0, 0.05)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
-              }}
-            >
-              <Stack align="center" gap="lg">
-                <Box
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '20px',
-                    background: 'linear-gradient(135deg, #f0f0f0, #e0e0e0)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <IconReceipt size={40} stroke={1.5} color="var(--mantine-color-dimmed)" />
-                </Box>
-                <Box ta="center">
-                  <Text size="lg" fw={700} mb={4}>
-                    Нет сохраненных смен
-                  </Text>
-                  <Text c="dimmed" size="sm">
-                    Начните добавлять заказы в калькуляторе
-                  </Text>
-                </Box>
-              </Stack>
-            </Paper>
-          </Box>
-        ) : (
-          <Stack gap="md">
-            {days.map((day, index) => (
-              <Box
-                key={day.id}
-                className="animate-fade-in"
-                style={{
-                  animationDelay: `${0.2 + index * 0.05}s`,
-                  animationFillMode: 'both',
-                }}
-              >
-                <UnstyledButton
-                  onClick={() => setSelected(day)}
-                  style={{ width: '100%', textAlign: 'left' }}
-                  onMouseEnter={() => setHoverStates((prev) => ({ ...prev, [day.id]: true }))}
-                  onMouseLeave={() => setHoverStates((prev) => ({ ...prev, [day.id]: false }))}
-                >
-                  <Paper
-                    radius="20px"
-                    p="24px"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.7)',
-                      backdropFilter: 'blur(20px)',
-                      border: '1px solid rgba(0, 0, 0, 0.05)',
-                      boxShadow: hoverStates[day.id]
-                        ? '0 16px 48px rgba(0, 0, 0, 0.12)'
-                        : '0 8px 32px rgba(0, 0, 0, 0.08)',
-                      transform: hoverStates[day.id] ? 'translateY(-4px)' : 'translateY(0)',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <Stack gap="lg">
-                      <Group justify="space-between" align="flex-start">
-                        <Box style={{ flex: 1 }}>
-                          <Group gap="xs" mb={8}>
-                            <Box
-                              style={{
-                                width: '40px',
-                                height: '40px',
-                                borderRadius: '12px',
-                                background: 'linear-gradient(135deg, #15aabf, #12b886)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                boxShadow: '0 4px 12px rgba(21, 170, 191, 0.3)',
-                              }}
-                            >
-                              <IconCalendar size={22} color="white" />
-                            </Box>
-                            <Text size="xl" fw={800}>
-                              {formatDate(day.date)}
-                            </Text>
-                          </Group>
-                          <Group gap="xs">
-                            <Badge
-                              size="lg"
-                              variant="light"
-                              color="cyan"
-                              style={{
-                                paddingLeft: '12px',
-                                paddingRight: '12px',
-                                fontWeight: 700,
-                              }}
-                            >
-                              <Group gap={6}>
-                                <IconShoppingCart size={16} />
-                                {day.orders.length} заказов
-                              </Group>
-                            </Badge>
-                            <Badge
-                              size="lg"
-                              style={{
-                                paddingLeft: '12px',
-                                paddingRight: '12px',
-                                fontWeight: 700,
-                                background:
-                                  day.totals.netProfit >= 0
-                                    ? 'linear-gradient(135deg, #12b886, #0ca678)'
-                                    : 'linear-gradient(135deg, #fa5252, #e03131)',
-                                color: 'white',
-                                border: 'none',
-                              }}
-                            >
-                              {formatCurrency(day.totals.netProfit)}
-                            </Badge>
-                          </Group>
-                        </Box>
-                        <Group gap={8}>
-                          <ActionIcon
-                            size={44}
-                            variant="light"
-                            color="cyan"
-                            radius="xl"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setSelected(day)
-                            }}
-                            style={{
-                              transition: 'all 0.2s ease',
-                            }}
-                          >
-                            <IconEye size={22} />
-                          </ActionIcon>
-                          <ActionIcon
-                            size={44}
-                            variant="light"
-                            color="red"
-                            radius="xl"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleDelete(day.id)
-                            }}
-                            style={{
-                              transition: 'all 0.2s ease',
-                            }}
-                          >
-                            <IconTrash size={22} />
-                          </ActionIcon>
-                        </Group>
-                      </Group>
-
-                      <Group grow>
-                        {/* Cash */}
-                        <Box
-                          style={{
-                            borderRadius: '14px',
-                            padding: '16px',
-                            background: 'rgba(18, 184, 134, 0.08)',
-                            border: '1px solid rgba(18, 184, 134, 0.15)',
-                          }}
-                        >
-                          <Group gap="xs" mb={4}>
-                            <Box
-                              style={{
-                                width: '28px',
-                                height: '28px',
-                                borderRadius: '8px',
-                                background: 'linear-gradient(135deg, #12b886, #0ca678)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              <IconCash size={16} color="white" />
-                            </Box>
-                            <Text size="xs" c="dimmed" fw={700} tt="uppercase">
-                              Наличные
-                            </Text>
-                          </Group>
-                          <Text size="lg" fw={800}>
-                            {formatCurrency(day.totals.totalCash)}
-                          </Text>
-                        </Box>
-
-                        {/* Card */}
-                        <Box
-                          style={{
-                            borderRadius: '14px',
-                            padding: '16px',
-                            background: 'rgba(34, 139, 230, 0.08)',
-                            border: '1px solid rgba(34, 139, 230, 0.15)',
-                          }}
-                        >
-                          <Group gap="xs" mb={4}>
-                            <Box
-                              style={{
-                                width: '28px',
-                                height: '28px',
-                                borderRadius: '8px',
-                                background: 'linear-gradient(135deg, #228be6, #1c7ed6)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              <IconCreditCard size={16} color="white" />
-                            </Box>
-                            <Text size="xs" c="dimmed" fw={700} tt="uppercase">
-                              Безналичные
-                            </Text>
-                          </Group>
-                          <Text size="lg" fw={800}>
-                            {formatCurrency(day.totals.totalCard)}
-                          </Text>
-                        </Box>
-
-                        {/* Gross */}
-                        <Box
-                          style={{
-                            borderRadius: '14px',
-                            padding: '16px',
-                            background: 'rgba(21, 170, 191, 0.08)',
-                            border: '1px solid rgba(21, 170, 191, 0.15)',
-                          }}
-                        >
-                          <Group gap="xs" mb={4}>
-                            <Box
-                              style={{
-                                width: '28px',
-                                height: '28px',
-                                borderRadius: '8px',
-                                background: 'linear-gradient(135deg, #15aabf, #1098ad)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              <IconTrendingUp size={16} color="white" />
-                            </Box>
-                            <Text size="xs" c="dimmed" fw={700} tt="uppercase">
-                              Выручка
-                            </Text>
-                          </Group>
-                          <Text size="lg" fw={800}>
-                            {formatCurrency(day.totals.gross)}
-                          </Text>
-                        </Box>
-                      </Group>
-                    </Stack>
-                  </Paper>
-                </UnstyledButton>
-              </Box>
-            ))}
-          </Stack>
-        )}
-
-        {/* Detail Modal */}
-        <Modal
-          opened={!!selected}
-          onClose={() => setSelected(null)}
-          title={
-            <Text size="xl" fw={800}>
-              Детали смены
+    <div className="history-page">
+      <BSContainer className="py-3 py-md-4 py-lg-5">
+        <div className="d-flex flex-column gap-4">
+          {/* Header */}
+          <div className="animate-fade-in">
+            <h1 className="page-title mb-2">История смен</h1>
+            <Text size="md" c="dimmed" fw={500}>
+              Все ваши сохраненные смены и статистика
             </Text>
-          }
-          size="lg"
-          centered
-          radius="xl"
-          padding="xl"
-          styles={{
-            content: {
-              background: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(20px)',
-            },
-          }}
-        >
-          {selected && (
-            <Stack gap="xl">
-              <Box>
-                <Text size="28px" fw={900} mb={8}>
-                  {formatDate(selected.date)}
+          </div>
+
+          {/* Summary Stats Card */}
+          <div className="summary-card animate-scale-in" style={{ animationDelay: '0.1s' }}>
+            <div className="summary-decorations">
+              <div className="blur-circle blur-circle-1"></div>
+              <div className="blur-circle blur-circle-2"></div>
+            </div>
+
+            <div className="summary-content">
+              <Row className="align-items-start mb-4">
+                <Col xs={12} md={6}>
+                  <div className="d-flex align-items-center gap-2 mb-2">
+                    <div className="summary-icon">
+                      <IconChartLine size={24} color="white" />
+                    </div>
+                    <span className="summary-label">Общая прибыль</span>
+                  </div>
+                  <div className="summary-profit">{formatCurrency(summary.profit)}</div>
+                </Col>
+                <Col xs={12} md={6}>
+                  <Row className="g-3 g-md-4">
+                    <Col xs={6} className="text-center">
+                      <div className="summary-stat-label">Смен</div>
+                      <div className="summary-stat-value">{days.length}</div>
+                    </Col>
+                    <Col xs={6} className="text-center">
+                      <div className="summary-stat-label">Заказов</div>
+                      <div className="summary-stat-value">{summary.orders}</div>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+
+              <Row className="g-3">
+                <Col xs={12} md={6}>
+                  <div className="summary-payment-card">
+                    <div className="d-flex align-items-center gap-2 mb-2">
+                      <div className="summary-payment-icon">
+                        <IconCash size={20} color="white" />
+                      </div>
+                      <span className="summary-payment-label">Наличные</span>
+                    </div>
+                    <div className="summary-payment-amount">{formatCurrency(summary.cash)}</div>
+                  </div>
+                </Col>
+                <Col xs={12} md={6}>
+                  <div className="summary-payment-card">
+                    <div className="d-flex align-items-center gap-2 mb-2">
+                      <div className="summary-payment-icon">
+                        <IconCreditCard size={20} color="white" />
+                      </div>
+                      <span className="summary-payment-label">Безналичные</span>
+                    </div>
+                    <div className="summary-payment-amount">{formatCurrency(summary.card)}</div>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </div>
+
+          {/* Days List */}
+          {!days.length ? (
+            <div className="empty-state animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <div className="empty-state-icon">
+                <IconReceipt size={40} stroke={1.5} />
+              </div>
+              <div className="text-center">
+                <Text size="lg" fw={700} mb={1}>
+                  Нет сохраненных смен
                 </Text>
-                <Text
-                  size="32px"
-                  fw={900}
+                <Text c="dimmed" size="sm">
+                  Начните добавлять заказы в калькуляторе
+                </Text>
+              </div>
+            </div>
+          ) : (
+            <div className="d-flex flex-column gap-3">
+              {days.map((day, index) => (
+                <div
+                  key={day.id}
+                  className="animate-fade-in"
                   style={{
-                    background:
-                      selected.totals.netProfit >= 0
-                        ? 'linear-gradient(135deg, #12b886, #0ca678)'
-                        : 'linear-gradient(135deg, #fa5252, #e03131)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
+                    animationDelay: `${0.2 + index * 0.05}s`,
+                    animationFillMode: 'both',
                   }}
                 >
-                  Прибыль: {formatCurrency(selected.totals.netProfit)}
-                </Text>
-              </Box>
+                  <button
+                    className={`day-card ${hoverStates[day.id] ? 'hovered' : ''}`}
+                    onClick={() => setSelected(day)}
+                    onMouseEnter={() => setHoverStates((prev) => ({ ...prev, [day.id]: true }))}
+                    onMouseLeave={() => setHoverStates((prev) => ({ ...prev, [day.id]: false }))}
+                  >
+                    <div className="day-card-header">
+                      <div className="flex-grow-1">
+                        <div className="d-flex align-items-center gap-2 mb-2">
+                          <div className="day-card-icon">
+                            <IconCalendar size={22} color="white" />
+                          </div>
+                          <span className="day-card-date">{formatDate(day.date)}</span>
+                        </div>
+                        <div className="d-flex align-items-center gap-2 flex-wrap">
+                          <Badge size="lg" variant="light" color="cyan">
+                            <Group gap={6}>
+                              <IconShoppingCart size={16} />
+                              {day.orders.length} заказов
+                            </Group>
+                          </Badge>
+                          <div className={`day-card-profit ${day.totals.netProfit >= 0 ? 'positive' : 'negative'}`}>
+                            {formatCurrency(day.totals.netProfit)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="d-flex gap-2">
+                        <ActionIcon
+                          size={44}
+                          variant="light"
+                          color="cyan"
+                          radius="xl"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelected(day)
+                          }}
+                        >
+                          <IconEye size={22} />
+                        </ActionIcon>
+                        <ActionIcon
+                          size={44}
+                          variant="light"
+                          color="red"
+                          radius="xl"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDelete(day.id)
+                          }}
+                        >
+                          <IconTrash size={22} />
+                        </ActionIcon>
+                      </div>
+                    </div>
 
-              <Divider />
+                    <Row className="g-2 g-md-3 mt-3">
+                      <Col xs={12} md={4}>
+                        <div className="day-stat-card cash">
+                          <div className="d-flex align-items-center gap-2 mb-1">
+                            <div className="day-stat-icon cash">
+                              <IconCash size={16} color="white" />
+                            </div>
+                            <span className="day-stat-label">Наличные</span>
+                          </div>
+                          <div className="day-stat-value">{formatCurrency(day.totals.totalCash)}</div>
+                        </div>
+                      </Col>
+                      <Col xs={12} md={4}>
+                        <div className="day-stat-card card">
+                          <div className="d-flex align-items-center gap-2 mb-1">
+                            <div className="day-stat-icon card">
+                              <IconCreditCard size={16} color="white" />
+                            </div>
+                            <span className="day-stat-label">Безналичные</span>
+                          </div>
+                          <div className="day-stat-value">{formatCurrency(day.totals.totalCard)}</div>
+                        </div>
+                      </Col>
+                      <Col xs={12} md={4}>
+                        <div className="day-stat-card gross">
+                          <div className="d-flex align-items-center gap-2 mb-1">
+                            <div className="day-stat-icon gross">
+                              <IconTrendingUp size={16} color="white" />
+                            </div>
+                            <span className="day-stat-label">Выручка</span>
+                          </div>
+                          <div className="day-stat-value">{formatCurrency(day.totals.gross)}</div>
+                        </div>
+                      </Col>
+                    </Row>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
-              <Stack gap="md">
-                <Group gap="xs">
-                  <Box
+          {/* Detail Modal */}
+          <Modal
+            opened={!!selected}
+            onClose={() => setSelected(null)}
+            title={
+              <Text size="xl" fw={800}>
+                Детали смены
+              </Text>
+            }
+            size="lg"
+            centered
+            radius="xl"
+            padding="xl"
+            styles={{
+              content: {
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(20px)',
+              },
+            }}
+          >
+            {selected && (
+              <Stack gap="xl">
+                <Box>
+                  <Text size="28px" fw={900} mb={8}>
+                    {formatDate(selected.date)}
+                  </Text>
+                  <Text
+                    size="32px"
+                    fw={900}
                     style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '10px',
-                      background: 'linear-gradient(135deg, #15aabf, #12b886)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      background:
+                        selected.totals.netProfit >= 0
+                          ? 'linear-gradient(135deg, #12b886, #0ca678)'
+                          : 'linear-gradient(135deg, #fa5252, #e03131)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
                     }}
                   >
-                    <IconShoppingCart size={18} color="white" />
-                  </Box>
-                  <Text size="lg" fw={800} tt="uppercase">
-                    Заказы ({selected.orders.length})
+                    Прибыль: {formatCurrency(selected.totals.netProfit)}
                   </Text>
-                </Group>
+                </Box>
 
-                <Stack gap="xs">
-                  {selected.orders.map((order, index) => (
+                <Divider />
+
+                <Stack gap="md">
+                  <Group gap="xs">
                     <Box
-                      key={order.id}
-                      className="animate-fade-in"
                       style={{
-                        animationDelay: `${index * 0.03}s`,
-                        animationFillMode: 'both',
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '10px',
+                        background: 'linear-gradient(135deg, #15aabf, #12b886)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
+                      <IconShoppingCart size={18} color="white" />
+                    </Box>
+                    <Text size="lg" fw={800} tt="uppercase">
+                      Заказы ({selected.orders.length})
+                    </Text>
+                  </Group>
+
+                  <Stack gap="xs">
+                    {selected.orders.map((order, index) => (
+                      <Box
+                        key={order.id}
+                        className="animate-fade-in"
+                        style={{
+                          animationDelay: `${index * 0.03}s`,
+                          animationFillMode: 'both',
+                        }}
+                      >
+                        <Paper
+                          p="lg"
+                          radius="16px"
+                          style={{
+                            background: 'rgba(255, 255, 255, 0.5)',
+                            border: '1px solid rgba(0, 0, 0, 0.05)',
+                          }}
+                        >
+                          <Group justify="space-between" align="center">
+                            <Group gap="md">
+                              <Box
+                                style={{
+                                  width: '44px',
+                                  height: '44px',
+                                  borderRadius: '12px',
+                                  background:
+                                    order.paymentType === 'cash'
+                                      ? 'linear-gradient(135deg, #12b886, #0ca678)'
+                                      : 'linear-gradient(135deg, #228be6, #1c7ed6)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  boxShadow:
+                                    order.paymentType === 'cash'
+                                      ? '0 4px 12px rgba(18, 184, 134, 0.3)'
+                                      : '0 4px 12px rgba(34, 139, 230, 0.3)',
+                                }}
+                              >
+                                {order.paymentType === 'cash' ? (
+                                  <IconCash size={24} color="white" />
+                                ) : (
+                                  <IconCreditCard size={24} color="white" />
+                                )}
+                              </Box>
+                              <Box>
+                                <Text size="xl" fw={800}>
+                                  {formatCurrency(order.amount)}
+                                </Text>
+                                <Text size="sm" c="dimmed" fw={600}>
+                                  {order.paymentType === 'cash' ? 'Наличные' : 'Безналичные'}
+                                </Text>
+                              </Box>
+                            </Group>
+                            {order.tips && order.tips > 0 && (
+                              <Badge
+                                size="lg"
+                                style={{
+                                  background: 'linear-gradient(135deg, #fab005, #fd7e14)',
+                                  color: 'white',
+                                  fontWeight: 700,
+                                  paddingLeft: '12px',
+                                  paddingRight: '12px',
+                                }}
+                              >
+                                Чаевые {formatCurrency(order.tips)}
+                              </Badge>
+                            )}
+                          </Group>
+                        </Paper>
+                      </Box>
+                    ))}
+                  </Stack>
+                </Stack>
+
+                {selected.notes && (
+                  <>
+                    <Divider />
+                    <Box>
+                      <Text size="sm" fw={800} c="dimmed" tt="uppercase" mb="md">
+                        Заметка
+                      </Text>
                       <Paper
                         p="lg"
                         radius="16px"
@@ -598,103 +408,33 @@ export function HistoryPage() {
                           border: '1px solid rgba(0, 0, 0, 0.05)',
                         }}
                       >
-                        <Group justify="space-between" align="center">
-                          <Group gap="md">
-                            <Box
-                              style={{
-                                width: '44px',
-                                height: '44px',
-                                borderRadius: '12px',
-                                background:
-                                  order.paymentType === 'cash'
-                                    ? 'linear-gradient(135deg, #12b886, #0ca678)'
-                                    : 'linear-gradient(135deg, #228be6, #1c7ed6)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                boxShadow:
-                                  order.paymentType === 'cash'
-                                    ? '0 4px 12px rgba(18, 184, 134, 0.3)'
-                                    : '0 4px 12px rgba(34, 139, 230, 0.3)',
-                              }}
-                            >
-                              {order.paymentType === 'cash' ? (
-                                <IconCash size={24} color="white" />
-                              ) : (
-                                <IconCreditCard size={24} color="white" />
-                              )}
-                            </Box>
-                            <Box>
-                              <Text size="xl" fw={800}>
-                                {formatCurrency(order.amount)}
-                              </Text>
-                              <Text size="sm" c="dimmed" fw={600}>
-                                {order.paymentType === 'cash' ? 'Наличные' : 'Безналичные'}
-                              </Text>
-                            </Box>
-                          </Group>
-                          {order.tips && order.tips > 0 && (
-                            <Badge
-                              size="lg"
-                              style={{
-                                background: 'linear-gradient(135deg, #fab005, #fd7e14)',
-                                color: 'white',
-                                fontWeight: 700,
-                                paddingLeft: '12px',
-                                paddingRight: '12px',
-                              }}
-                            >
-                              Чаевые {formatCurrency(order.tips)}
-                            </Badge>
-                          )}
-                        </Group>
+                        <Text size="md" fw={500}>
+                          {selected.notes}
+                        </Text>
                       </Paper>
                     </Box>
-                  ))}
-                </Stack>
+                  </>
+                )}
+
+                <Button
+                  fullWidth
+                  size="xl"
+                  radius="xl"
+                  onClick={() => setSelected(null)}
+                  style={{
+                    background: 'linear-gradient(135deg, #15aabf, #12b886)',
+                    fontWeight: 700,
+                    boxShadow: '0 8px 24px rgba(18, 184, 134, 0.3)',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  Закрыть
+                </Button>
               </Stack>
-
-              {selected.notes && (
-                <>
-                  <Divider />
-                  <Box>
-                    <Text size="sm" fw={800} c="dimmed" tt="uppercase" mb="md">
-                      Заметка
-                    </Text>
-                    <Paper
-                      p="lg"
-                      radius="16px"
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.5)',
-                        border: '1px solid rgba(0, 0, 0, 0.05)',
-                      }}
-                    >
-                      <Text size="md" fw={500}>
-                        {selected.notes}
-                      </Text>
-                    </Paper>
-                  </Box>
-                </>
-              )}
-
-              <Button
-                fullWidth
-                size="xl"
-                radius="xl"
-                onClick={() => setSelected(null)}
-                style={{
-                  background: 'linear-gradient(135deg, #15aabf, #12b886)',
-                  fontWeight: 700,
-                  boxShadow: '0 8px 24px rgba(18, 184, 134, 0.3)',
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Закрыть
-              </Button>
-            </Stack>
-          )}
-        </Modal>
-      </Stack>
-    </Container>
+            )}
+          </Modal>
+        </div>
+      </BSContainer>
+    </div>
   )
 }

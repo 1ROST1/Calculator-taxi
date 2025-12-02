@@ -53,7 +53,7 @@ export function AuthPage() {
   const handleLogout = () => {
     localStorage.removeItem(AUTH_STORAGE_KEY)
     setAuth(null)
-    notifications.show({ color: 'gray', title: 'Вы вышли из аккаунта' })
+    notifications.show({ color: 'gray', title: 'Вы вышли из аккаунта', message: '' })
   }
 
   const apiBase = (import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:8000'

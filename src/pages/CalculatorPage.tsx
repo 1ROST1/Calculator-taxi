@@ -1,16 +1,6 @@
 import { useState, useMemo } from 'react'
-import {
-  Box,
-  Button,
-  Stack,
-  Text,
-  TextInput,
-  Group,
-  ActionIcon,
-  Container,
-  UnstyledButton,
-} from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { Container, Row, Col } from 'react-bootstrap'
+import { Button, Text, TextInput, ActionIcon } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import {
   IconPlus,
@@ -30,11 +20,10 @@ import { saveDay } from '../lib/db'
 import { formatCurrency } from '../lib/format'
 import { useSettings, defaultSettings } from '../hooks/useSettings'
 import type { OrderInput, DayExtras, DayRecord } from '../types'
+import './CalculatorPage.css'
 
 export function CalculatorPage() {
   const { settings } = useSettings()
-  const isMobile = useMediaQuery('(max-width: 767px)')
-  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)')
   const [orders, setOrders] = useState<OrderInput[]>([])
   const [date] = useState(dayjs().format('YYYY-MM-DD'))
   const [amount, setAmount] = useState('')
@@ -117,279 +106,110 @@ export function CalculatorPage() {
   }
 
   return (
-    <Box
-      style={{
-        minHeight: 'calc(100vh - 70px)',
-        background: 'transparent',
-      }}
-    >
-      <Container size="md" p={isMobile ? 'sm' : isTablet ? 'md' : 'lg'}>
-        <Stack gap={isMobile ? 20 : isTablet ? 24 : 32}>
+    <div className="calculator-page">
+      <Container className="py-3 py-md-4 py-lg-5">
+        <div className="d-flex flex-column gap-4">
           {/* Header */}
-          <Box className="animate-fade-in">
-            <Text
-              size={isMobile ? '28px' : isTablet ? '36px' : '42px'}
-              fw={900}
-              mb={isMobile ? 4 : 8}
-              style={{
-                background: 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              Калькулятор смены
-            </Text>
-            <Group gap={8}>
+          <div className="animate-fade-in">
+            <h1 className="page-title mb-2">Калькулятор смены</h1>
+            <div className="d-flex align-items-center gap-2">
               <IconCalendar size={18} style={{ opacity: 0.6 }} />
               <Text size="sm" c="dimmed" fw={500}>
                 {dayjs(date).format('DD MMMM YYYY, dddd')}
               </Text>
-            </Group>
-          </Box>
+            </div>
+          </div>
 
           {/* Main Profit Card */}
-          <Box
-            className="animate-scale-in hover-lift"
-            style={{
-              position: 'relative',
-              overflow: 'hidden',
-              borderRadius: isMobile ? '16px' : isTablet ? '20px' : '24px',
-              padding: isMobile ? '20px' : isTablet ? '24px' : '32px',
-              background:
-                totals.netProfit >= 0
-                  ? 'linear-gradient(135deg, #12b886 0%, #0ca678 50%, #099268 100%)'
-                  : 'linear-gradient(135deg, #fa5252 0%, #e03131 50%, #c92a2a 100%)',
-              boxShadow: totals.netProfit >= 0
-                ? '0 20px 60px rgba(18, 184, 134, 0.4)'
-                : '0 20px 60px rgba(250, 82, 82, 0.4)',
-            }}
-          >
-            {/* Decorative elements */}
-            <Box
-              style={{
-                position: 'absolute',
-                top: '-50%',
-                right: '-10%',
-                width: '300px',
-                height: '300px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.1)',
-                filter: 'blur(60px)',
-              }}
-            />
-            <Box
-              style={{
-                position: 'absolute',
-                bottom: '-30%',
-                left: '-5%',
-                width: '200px',
-                height: '200px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.08)',
-                filter: 'blur(50px)',
-              }}
-            />
+          <div className={`profit-card animate-scale-in ${totals.netProfit >= 0 ? 'positive' : 'negative'}`}>
+            <div className="profit-card-decorations">
+              <div className="blur-circle blur-circle-1"></div>
+              <div className="blur-circle blur-circle-2"></div>
+            </div>
 
-            <Stack gap={16} align="center" style={{ position: 'relative' }}>
-              <Group gap={8}>
+            <div className="profit-card-content">
+              <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
                 <IconSparkles size={20} color="rgba(255, 255, 255, 0.9)" />
-                <Text
-                  size="13px"
-                  fw={700}
-                  tt="uppercase"
-                  lts={2}
-                  style={{ color: 'rgba(255, 255, 255, 0.9)' }}
-                >
-                  Чистая прибыль
-                </Text>
-              </Group>
+                <span className="profit-label">Чистая прибыль</span>
+              </div>
 
-              <Text
-                size={isMobile ? '36px' : isTablet ? '48px' : '64px'}
-                fw={900}
-                lh={1}
-                style={{
-                  color: '#ffffff',
-                  fontVariantNumeric: 'tabular-nums',
-                  textShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-                  letterSpacing: '-0.03em',
-                }}
-              >
-                {formatCurrency(totals.netProfit)}
-              </Text>
+              <div className="profit-amount">{formatCurrency(totals.netProfit)}</div>
 
-              <Group gap={isMobile ? 16 : isTablet ? 24 : 40} mt={isMobile ? 12 : 16} wrap={isMobile ? 'wrap' : 'nowrap'} justify="center">
-                <Box ta="center">
-                  <Text size="xs" fw={600} tt="uppercase" lts={1} style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                    Выручка
-                  </Text>
-                  <Text size={isMobile ? 'lg' : 'xl'} fw={800} style={{ color: '#ffffff' }}>
-                    {formatCurrency(totals.gross)}
-                  </Text>
-                </Box>
-                <Box ta="center">
-                  <Text size="xs" fw={600} tt="uppercase" lts={1} style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                    Заказов
-                  </Text>
-                  <Text size={isMobile ? 'lg' : 'xl'} fw={800} style={{ color: '#ffffff' }}>
-                    {orders.length}
-                  </Text>
-                </Box>
-                <Box ta="center">
-                  <Text size="xs" fw={600} tt="uppercase" lts={1} style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                    Расходы
-                  </Text>
-                  <Text size={isMobile ? 'lg' : 'xl'} fw={800} style={{ color: '#ffffff' }}>
-                    {formatCurrency(totals.extrasTotal)}
-                  </Text>
-                </Box>
-              </Group>
-            </Stack>
-          </Box>
+              <Row className="g-3 g-md-4 mt-3 justify-content-center">
+                <Col xs={4} className="text-center">
+                  <div className="profit-stat-label">Выручка</div>
+                  <div className="profit-stat-value">{formatCurrency(totals.gross)}</div>
+                </Col>
+                <Col xs={4} className="text-center">
+                  <div className="profit-stat-label">Заказов</div>
+                  <div className="profit-stat-value">{orders.length}</div>
+                </Col>
+                <Col xs={4} className="text-center">
+                  <div className="profit-stat-label">Расходы</div>
+                  <div className="profit-stat-value">{formatCurrency(totals.extrasTotal)}</div>
+                </Col>
+              </Row>
+            </div>
+          </div>
 
           {/* Payment Stats */}
-          <Stack gap={isMobile ? 12 : 16} className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            <Box
-              className="glass-card hover-lift"
-              style={{
-                borderRadius: isMobile ? '16px' : '20px',
-                padding: isMobile ? '16px' : '20px',
-                border: '2px solid rgba(18, 184, 134, 0.2)',
-              }}
-            >
-              <Group gap={16}>
-                <Box
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: '14px',
-                    background: 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 8px 24px rgba(18, 184, 134, 0.3)',
-                  }}
-                >
+          <Row className="g-3 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <Col xs={12} md={6}>
+              <div className="payment-stat-card cash-card">
+                <div className="payment-icon cash-icon">
                   <IconCash size={28} stroke={2.5} color="#ffffff" />
-                </Box>
-                <Box style={{ flex: 1 }}>
-                  <Text size="xs" c="dimmed" fw={600} tt="uppercase" lts={1}>
-                    Наличные
-                  </Text>
-                  <Text size="28px" fw={900} lh={1.2} mt={4}>
-                    {formatCurrency(totals.totalCash)}
-                  </Text>
-                </Box>
-              </Group>
-            </Box>
+                </div>
+                <div className="flex-grow-1">
+                  <div className="payment-stat-label">Наличные</div>
+                  <div className="payment-stat-amount">{formatCurrency(totals.totalCash)}</div>
+                </div>
+              </div>
+            </Col>
 
-            <Box
-              className="glass-card hover-lift"
-              style={{
-                borderRadius: isMobile ? '16px' : '20px',
-                padding: isMobile ? '16px' : '20px',
-                border: '2px solid rgba(34, 139, 230, 0.2)',
-              }}
-            >
-              <Group gap={16}>
-                <Box
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: '14px',
-                    background: 'linear-gradient(135deg, #228be6 0%, #1c7ed6 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 8px 24px rgba(34, 139, 230, 0.3)',
-                  }}
-                >
+            <Col xs={12} md={6}>
+              <div className="payment-stat-card card-card">
+                <div className="payment-icon card-icon">
                   <IconCreditCard size={28} stroke={2.5} color="#ffffff" />
-                </Box>
-                <Box style={{ flex: 1 }}>
-                  <Text size="xs" c="dimmed" fw={600} tt="uppercase" lts={1}>
-                    Безналичные
-                  </Text>
-                  <Text size="28px" fw={900} lh={1.2} mt={4}>
-                    {formatCurrency(totals.totalCard)}
-                  </Text>
-                </Box>
-              </Group>
-            </Box>
-          </Stack>
+                </div>
+                <div className="flex-grow-1">
+                  <div className="payment-stat-label">Безналичные</div>
+                  <div className="payment-stat-amount">{formatCurrency(totals.totalCard)}</div>
+                </div>
+              </div>
+            </Col>
+          </Row>
 
           {/* Add Order Section */}
-          <Box
-            className="glass-card animate-fade-in"
-            style={{
-              borderRadius: isMobile ? '16px' : isTablet ? '20px' : '24px',
-              padding: isMobile ? '20px' : isTablet ? '24px' : '32px',
-              animationDelay: '0.2s',
-            }}
-          >
-            <Stack gap={24}>
-              <Group gap={12}>
-                <IconTrendingUp size={24} stroke={2} style={{ color: 'var(--mantine-color-teal-6)' }} />
+          <div className="glass-card animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="d-flex flex-column gap-4">
+              <div className="d-flex align-items-center gap-3">
+                <IconTrendingUp size={24} stroke={2} style={{ color: 'var(--bs-teal)' }} />
                 <Text size="xl" fw={800}>
                   Добавить заказ
                 </Text>
-              </Group>
+              </div>
 
               {/* Payment Type Selector */}
-              <Group grow>
-                <UnstyledButton
-                  onClick={() => setPaymentType('cash')}
-                  style={{
-                    padding: '16px 24px',
-                    borderRadius: '16px',
-                    background:
-                      paymentType === 'cash'
-                        ? 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)'
-                        : 'transparent',
-                    border:
-                      paymentType === 'cash'
-                        ? '2px solid transparent'
-                        : '2px solid rgba(18, 184, 134, 0.3)',
-                    transition: 'all 0.3s ease',
-                    boxShadow:
-                      paymentType === 'cash' ? '0 8px 24px rgba(18, 184, 134, 0.3)' : 'none',
-                  }}
-                >
-                  <Group gap={12} justify="center">
-                    <IconCash size={24} color={paymentType === 'cash' ? '#ffffff' : 'currentColor'} />
-                    <Text fw={700} size="lg" style={{ color: paymentType === 'cash' ? '#ffffff' : 'inherit' }}>
-                      Наличные
-                    </Text>
-                  </Group>
-                </UnstyledButton>
-
-                <UnstyledButton
-                  onClick={() => setPaymentType('card')}
-                  style={{
-                    padding: '16px 24px',
-                    borderRadius: '16px',
-                    background:
-                      paymentType === 'card'
-                        ? 'linear-gradient(135deg, #228be6 0%, #1c7ed6 100%)'
-                        : 'transparent',
-                    border:
-                      paymentType === 'card'
-                        ? '2px solid transparent'
-                        : '2px solid rgba(34, 139, 230, 0.3)',
-                    transition: 'all 0.3s ease',
-                    boxShadow:
-                      paymentType === 'card' ? '0 8px 24px rgba(34, 139, 230, 0.3)' : 'none',
-                  }}
-                >
-                  <Group gap={12} justify="center">
-                    <IconCreditCard size={24} color={paymentType === 'card' ? '#ffffff' : 'currentColor'} />
-                    <Text fw={700} size="lg" style={{ color: paymentType === 'card' ? '#ffffff' : 'inherit' }}>
-                      Безналичные
-                    </Text>
-                  </Group>
-                </UnstyledButton>
-              </Group>
+              <Row className="g-2 g-md-3">
+                <Col xs={6}>
+                  <button
+                    className={`payment-type-btn ${paymentType === 'cash' ? 'active cash' : ''}`}
+                    onClick={() => setPaymentType('cash')}
+                  >
+                    <IconCash size={24} />
+                    <span>Наличные</span>
+                  </button>
+                </Col>
+                <Col xs={6}>
+                  <button
+                    className={`payment-type-btn ${paymentType === 'card' ? 'active card' : ''}`}
+                    onClick={() => setPaymentType('card')}
+                  >
+                    <IconCreditCard size={24} />
+                    <span>Безналичные</span>
+                  </button>
+                </Col>
+              </Row>
 
               <TextInput
                 size="xl"
@@ -403,6 +223,7 @@ export function CalculatorPage() {
                     ₽
                   </Text>
                 }
+                className="amount-input"
                 styles={{
                   input: {
                     fontSize: '32px',
@@ -412,11 +233,6 @@ export function CalculatorPage() {
                     borderRadius: '16px',
                     border: '2px solid rgba(18, 184, 134, 0.2)',
                     background: 'rgba(18, 184, 134, 0.05)',
-                    transition: 'all 0.3s ease',
-                    ':focus': {
-                      border: '2px solid rgba(18, 184, 134, 0.5)',
-                      background: 'rgba(18, 184, 134, 0.08)',
-                    },
                   },
                 }}
               />
@@ -426,205 +242,96 @@ export function CalculatorPage() {
                 leftSection={<IconPlus size={24} />}
                 onClick={handleAddOrder}
                 fullWidth
-                style={{
-                  height: '64px',
-                  borderRadius: '16px',
-                  fontSize: '18px',
-                  fontWeight: 700,
-                  background: 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)',
-                  border: 'none',
-                  boxShadow: '0 8px 24px rgba(18, 184, 134, 0.3)',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 12px 32px rgba(18, 184, 134, 0.4)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(18, 184, 134, 0.3)'
-                }}
+                className="add-order-btn"
               >
                 Добавить заказ
               </Button>
-            </Stack>
-          </Box>
+            </div>
+          </div>
 
           {/* Orders List */}
           {orders.length > 0 && (
-            <Box
-              className="glass-card animate-fade-in"
-              style={{
-                borderRadius: isMobile ? '16px' : isTablet ? '20px' : '24px',
-                padding: isMobile ? '20px' : isTablet ? '24px' : '32px',
-                animationDelay: '0.3s',
-              }}
-            >
-              <Stack gap={20}>
-                <Group justify="space-between">
+            <div className="glass-card animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <div className="d-flex flex-column gap-4">
+                <div className="d-flex justify-content-between align-items-center">
                   <Text size="xl" fw={800}>
                     Заказы смены
                   </Text>
-                  <Box
-                    style={{
-                      padding: '8px 16px',
-                      borderRadius: '12px',
-                      background: 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)',
-                      boxShadow: '0 4px 16px rgba(18, 184, 134, 0.3)',
-                    }}
-                  >
-                    <Text size="lg" fw={800} style={{ color: '#ffffff' }}>
-                      {orders.length}
-                    </Text>
-                  </Box>
-                </Group>
+                  <div className="orders-badge">{orders.length}</div>
+                </div>
 
-                <Stack gap={12}>
+                <div className="d-flex flex-column gap-3">
                   {orders.map((order, index) => (
-                    <Box
+                    <div
                       key={order.id}
-                      className="hover-lift"
-                      style={{
-                        padding: '20px',
-                        borderRadius: '16px',
-                        background:
-                          order.paymentType === 'cash'
-                            ? 'rgba(18, 184, 134, 0.08)'
-                            : 'rgba(34, 139, 230, 0.08)',
-                        border:
-                          order.paymentType === 'cash'
-                            ? '2px solid rgba(18, 184, 134, 0.2)'
-                            : '2px solid rgba(34, 139, 230, 0.2)',
-                        animation: `fadeIn 0.4s ease-out ${index * 0.05}s both`,
-                      }}
+                      className={`order-item ${order.paymentType}`}
+                      style={{ animation: `fadeIn 0.4s ease-out ${index * 0.05}s both` }}
                     >
-                      <Group justify="space-between" align="center">
-                        <Group gap={16}>
-                          <Box
-                            style={{
-                              width: 48,
-                              height: 48,
-                              borderRadius: '12px',
-                              background:
-                                order.paymentType === 'cash'
-                                  ? 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)'
-                                  : 'linear-gradient(135deg, #228be6 0%, #1c7ed6 100%)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              boxShadow:
-                                order.paymentType === 'cash'
-                                  ? '0 4px 16px rgba(18, 184, 134, 0.3)'
-                                  : '0 4px 16px rgba(34, 139, 230, 0.3)',
-                            }}
-                          >
+                      <div className="d-flex justify-content-between align-items-center">
+                        <div className="d-flex align-items-center gap-3">
+                          <div className={`order-icon ${order.paymentType}`}>
                             {order.paymentType === 'cash' ? (
                               <IconCash size={24} color="#ffffff" stroke={2.5} />
                             ) : (
                               <IconCreditCard size={24} color="#ffffff" stroke={2.5} />
                             )}
-                          </Box>
-                          <Box>
-                            <Text size="24px" fw={900} lh={1.2}>
-                              {formatCurrency(order.amount)}
-                            </Text>
-                            <Text size="sm" c="dimmed" fw={600} mt={4}>
+                          </div>
+                          <div>
+                            <div className="order-amount">{formatCurrency(order.amount)}</div>
+                            <Text size="sm" c="dimmed" fw={600} mt={1}>
                               {order.paymentType === 'cash' ? 'Наличные' : 'Безналичные'}
                             </Text>
-                          </Box>
-                        </Group>
+                          </div>
+                        </div>
                         <ActionIcon
                           size={48}
                           radius="12px"
                           variant="light"
                           color="red"
                           onClick={() => handleRemoveOrder(order.id)}
-                          style={{
-                            transition: 'all 0.2s ease',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.1)'
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)'
-                          }}
+                          className="delete-btn"
                         >
                           <IconTrash size={22} />
                         </ActionIcon>
-                      </Group>
-                    </Box>
+                      </div>
+                    </div>
                   ))}
-                </Stack>
-              </Stack>
-            </Box>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Action Buttons */}
-          <Stack gap={isMobile ? 12 : 0} className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <Button
-              size={isMobile ? 'lg' : 'xl'}
-              fullWidth
-              leftSection={<IconDeviceFloppy size={isMobile ? 20 : 24} />}
-              onClick={handleSaveDay}
-              disabled={!orders.length}
-              style={{
-                height: isMobile ? '56px' : '64px',
-                borderRadius: isMobile ? '14px' : '16px',
-                fontSize: isMobile ? '16px' : '18px',
-                fontWeight: 700,
-                background: orders.length
-                  ? 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)'
-                  : 'rgba(128, 128, 128, 0.3)',
-                border: 'none',
-                boxShadow: orders.length ? '0 8px 24px rgba(18, 184, 134, 0.3)' : 'none',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (orders.length) {
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 12px 32px rgba(18, 184, 134, 0.4)'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (orders.length) {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(18, 184, 134, 0.3)'
-                }
-              }}
-            >
-              Сохранить смену
-            </Button>
-            <Button
-              size={isMobile ? 'lg' : 'xl'}
-              fullWidth
-              leftSection={<IconMinus size={isMobile ? 20 : 24} />}
-              variant="light"
-              color="gray"
-              onClick={() => setOrders([])}
-              disabled={!orders.length}
-              style={{
-                height: isMobile ? '56px' : '64px',
-                borderRadius: isMobile ? '14px' : '16px',
-                fontSize: isMobile ? '16px' : '18px',
-                fontWeight: 700,
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (orders.length) {
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (orders.length) {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                }
-              }}
-            >
-              Очистить
-            </Button>
-          </Stack>
-        </Stack>
+          <Row className="g-3 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <Col xs={12}>
+              <Button
+                size="xl"
+                fullWidth
+                leftSection={<IconDeviceFloppy size={24} />}
+                onClick={handleSaveDay}
+                disabled={!orders.length}
+                className="save-btn"
+              >
+                Сохранить смену
+              </Button>
+            </Col>
+            <Col xs={12}>
+              <Button
+                size="xl"
+                fullWidth
+                leftSection={<IconMinus size={24} />}
+                variant="light"
+                color="gray"
+                onClick={() => setOrders([])}
+                disabled={!orders.length}
+                className="clear-btn"
+              >
+                Очистить
+              </Button>
+            </Col>
+          </Row>
+        </div>
       </Container>
-    </Box>
+    </div>
   )
 }

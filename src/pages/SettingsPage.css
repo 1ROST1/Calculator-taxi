@@ -1,0 +1,204 @@
+.settings-page {
+  min-height: calc(100vh - 60px);
+}
+
+@media (min-width: 768px) {
+  .settings-page {
+    min-height: calc(100vh - 70px);
+  }
+}
+
+/* Page Title */
+.page-title {
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #15aabf 0%, #12b886 50%, #0ca678 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .page-title {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .page-title {
+    font-size: 42px;
+  }
+}
+
+/* Settings Card */
+.settings-card {
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .settings-card {
+    padding: 32px;
+  }
+}
+
+html[data-mantine-color-scheme='dark'] .settings-card {
+  background: rgba(26, 26, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.settings-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settings-icon.light {
+  background: linear-gradient(135deg, #fab005, #fd7e14);
+  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
+}
+
+.settings-icon.dark {
+  background: linear-gradient(135deg, #364fc7, #4c6ef5);
+  box-shadow: 0 4px 12px rgba(54, 79, 199, 0.3);
+}
+
+.settings-icon.accent {
+  background: linear-gradient(135deg, #15aabf, #12b886);
+  box-shadow: 0 4px 12px rgba(21, 170, 191, 0.3);
+}
+
+.settings-icon.display {
+  background: linear-gradient(135deg, #228be6, #1971c2);
+  box-shadow: 0 4px 12px rgba(34, 139, 230, 0.3);
+}
+
+.settings-icon.calculation {
+  background: linear-gradient(135deg, #fab005, #fd7e14);
+  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
+}
+
+/* Switch Cards */
+.switch-card {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.switch-card.active {
+  background: rgba(18, 184, 134, 0.08);
+  border: 1px solid rgba(18, 184, 134, 0.2);
+}
+
+html[data-mantine-color-scheme='dark'] .switch-card {
+  background: rgba(26, 26, 26, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+html[data-mantine-color-scheme='dark'] .switch-card.active {
+  background: rgba(18, 184, 134, 0.15);
+  border: 1px solid rgba(18, 184, 134, 0.3);
+}
+
+/* Tariffs Card */
+.tariffs-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, #fab005 0%, #fd7e14 50%, #f76707 100%);
+  box-shadow: 0 20px 60px rgba(253, 126, 20, 0.35);
+}
+
+@media (min-width: 768px) {
+  .tariffs-card {
+    padding: 32px;
+  }
+}
+
+.tariffs-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.tariffs-card .blur-circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.tariffs-card .blur-circle-1 {
+  top: -40%;
+  right: -10%;
+  width: 250px;
+  height: 250px;
+  background: rgba(255, 255, 255, 0.15);
+  filter: blur(70px);
+}
+
+.tariffs-card .blur-circle-2 {
+  bottom: -20%;
+  left: -5%;
+  width: 180px;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.1);
+  filter: blur(50px);
+}
+
+.tariffs-content {
+  position: relative;
+  z-index: 1;
+}
+
+.tariffs-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tariffs-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tariff-input-card {
+  border-radius: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tariff-note {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}

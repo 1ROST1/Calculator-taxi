@@ -1,5 +1,4 @@
-import { AppShell, MantineProvider, createTheme } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { MantineProvider, createTheme } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { CalculatorPage } from './pages/CalculatorPage'
@@ -8,10 +7,10 @@ import { SettingsPage } from './pages/SettingsPage'
 import { AuthPage } from './pages/AuthPage'
 import { Navigation } from './components/Navigation'
 import { useSettings } from './hooks/useSettings'
+import './App.css'
 
 export function App() {
   const { settings, updateSettings } = useSettings()
-  const isMobile = useMediaQuery('(max-width: 767px)')
 
   const theme = createTheme({
     primaryColor: settings.accentColor,
@@ -108,33 +107,23 @@ export function App() {
     <MantineProvider theme={theme} defaultColorScheme="light" forceColorScheme={settings.colorScheme}>
       <Notifications position="top-center" limit={1} autoClose={2000} />
       <BrowserRouter>
-        <AppShell
-          header={{ height: isMobile ? 60 : 70 }}
-          padding={0}
-          styles={{
-            main: {
-              paddingTop: isMobile ? 60 : 70,
-            },
-          }}
-        >
-          <AppShell.Header>
-            <Navigation
-              colorScheme={settings.colorScheme}
-              onToggleTheme={() =>
-                updateSettings({ colorScheme: settings.colorScheme === 'dark' ? 'light' : 'dark' })
-              }
-            />
-          </AppShell.Header>
+        <div className={`app-wrapper ${settings.colorScheme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+          <Navigation
+            colorScheme={settings.colorScheme}
+            onToggleTheme={() =>
+              updateSettings({ colorScheme: settings.colorScheme === 'dark' ? 'light' : 'dark' })
+            }
+          />
 
-          <AppShell.Main>
+          <main className="app-main">
             <Routes>
               <Route path="/" element={<CalculatorPage />} />
               <Route path="/history" element={<HistoryPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/auth" element={<AuthPage />} />
             </Routes>
-          </AppShell.Main>
-        </AppShell>
+          </main>
+        </div>
       </BrowserRouter>
     </MantineProvider>
   )

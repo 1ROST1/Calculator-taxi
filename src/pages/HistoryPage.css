@@ -1,0 +1,342 @@
+.history-page {
+  min-height: calc(100vh - 60px);
+}
+
+@media (min-width: 768px) {
+  .history-page {
+    min-height: calc(100vh - 70px);
+  }
+}
+
+/* Page Title */
+.page-title {
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #12b886 0%, #15aabf 50%, #228be6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .page-title {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .page-title {
+    font-size: 42px;
+  }
+}
+
+/* Summary Card */
+.summary-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, #12b886 0%, #0ca678 50%, #099268 100%);
+  box-shadow: 0 20px 60px rgba(18, 184, 134, 0.35);
+}
+
+@media (min-width: 768px) {
+  .summary-card {
+    padding: 32px;
+  }
+}
+
+.summary-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.blur-circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.blur-circle-1 {
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.15);
+  filter: blur(80px);
+}
+
+.blur-circle-2 {
+  bottom: -30%;
+  left: -5%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  filter: blur(60px);
+}
+
+.summary-content {
+  position: relative;
+  z-index: 1;
+}
+
+.summary-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.summary-profit {
+  font-size: 36px;
+  font-weight: 900;
+  color: white;
+  line-height: 1.1;
+}
+
+@media (min-width: 768px) {
+  .summary-profit {
+    font-size: 48px;
+  }
+}
+
+.summary-stat-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.summary-stat-value {
+  font-size: 24px;
+  font-weight: 900;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .summary-stat-value {
+    font-size: 28px;
+  }
+}
+
+.summary-payment-card {
+  border-radius: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.summary-payment-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-payment-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.summary-payment-amount {
+  font-size: 20px;
+  font-weight: 900;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .summary-payment-amount {
+    font-size: 24px;
+  }
+}
+
+/* Empty State */
+.empty-state {
+  padding: 60px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+html[data-mantine-color-scheme='dark'] .empty-state {
+  background: rgba(26, 26, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.empty-state-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+/* Day Card */
+.day-card {
+  width: 100%;
+  text-align: left;
+  padding: 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+html[data-mantine-color-scheme='dark'] .day-card {
+  background: rgba(26, 26, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.day-card.hovered {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+html[data-mantine-color-scheme='dark'] .day-card.hovered {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+.day-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.day-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #15aabf, #12b886);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(21, 170, 191, 0.3);
+}
+
+.day-card-date {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+@media (min-width: 768px) {
+  .day-card-date {
+    font-size: 20px;
+  }
+}
+
+.day-card-profit {
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+}
+
+.day-card-profit.positive {
+  background: linear-gradient(135deg, #12b886, #0ca678);
+}
+
+.day-card-profit.negative {
+  background: linear-gradient(135deg, #fa5252, #e03131);
+}
+
+/* Day Stat Cards */
+.day-stat-card {
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.day-stat-card.cash {
+  background: rgba(18, 184, 134, 0.08);
+  border: 1px solid rgba(18, 184, 134, 0.15);
+}
+
+.day-stat-card.card {
+  background: rgba(34, 139, 230, 0.08);
+  border: 1px solid rgba(34, 139, 230, 0.15);
+}
+
+.day-stat-card.gross {
+  background: rgba(21, 170, 191, 0.08);
+  border: 1px solid rgba(21, 170, 191, 0.15);
+}
+
+.day-stat-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-stat-icon.cash {
+  background: linear-gradient(135deg, #12b886, #0ca678);
+}
+
+.day-stat-icon.card {
+  background: linear-gradient(135deg, #228be6, #1c7ed6);
+}
+
+.day-stat-icon.gross {
+  background: linear-gradient(135deg, #15aabf, #1098ad);
+}
+
+.day-stat-label {
+  font-size: 11px;
+  color: #999;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.day-stat-value {
+  font-size: 16px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+  .day-stat-value {
+    font-size: 18px;
+  }
+}

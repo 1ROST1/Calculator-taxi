@@ -1,8 +1,8 @@
-import { Box, Group, Text, UnstyledButton, ActionIcon, useMantineTheme } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { Navbar, Container, Nav } from 'react-bootstrap'
 import { IconCalculator, IconHistory, IconSettings, IconMoon, IconSun, IconSparkles } from '@tabler/icons-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
+import './Navigation.css'
 
 type Props = {
   colorScheme: 'light' | 'dark'
@@ -18,153 +18,57 @@ const navItems = [
 export function Navigation({ colorScheme, onToggleTheme }: Props) {
   const navigate = useNavigate()
   const location = useLocation()
-  const theme = useMantineTheme()
-  const isMobile = useMediaQuery('(max-width: 767px)')
-  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)')
   const [hoverStates, setHoverStates] = useState<Record<string, boolean>>({})
   const [themeHover, setThemeHover] = useState(false)
 
   return (
-    <Box
-      h={isMobile ? 60 : 70}
-      px={isMobile ? 'sm' : isTablet ? 'md' : 'xl'}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: 'none',
-        background: colorScheme === 'dark'
-          ? 'rgba(26, 26, 26, 0.8)'
-          : 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(20px)',
-        boxShadow: colorScheme === 'dark'
-          ? '0 4px 24px rgba(0, 0, 0, 0.5)'
-          : '0 4px 24px rgba(0, 0, 0, 0.06)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-      }}
+    <Navbar
+      className={`navigation-bar ${colorScheme === 'dark' ? 'navbar-dark' : 'navbar-light'}`}
+      fixed="top"
+      expand="lg"
     >
-      {/* Logo with gradient and icon */}
-      <Group gap={isMobile ? 6 : 'xs'}>
-        <Box
-          style={{
-            width: isMobile ? '36px' : '44px',
-            height: isMobile ? '36px' : '44px',
-            borderRadius: isMobile ? '10px' : '14px',
-            background: 'linear-gradient(135deg, #12b886 0%, #15aabf 50%, #0ca678 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(18, 184, 134, 0.4)',
-          }}
-        >
-          <IconSparkles size={isMobile ? 20 : 24} color="white" stroke={2.5} />
-        </Box>
-        {!isMobile && (
-          <Box>
-            <Text
-              size={isTablet ? '22px' : '26px'}
-              fw={900}
-              style={{
-                background: 'linear-gradient(135deg, #12b886 0%, #15aabf 50%, #0ca678 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                lineHeight: 1,
-              }}
-            >
-              Такси Профит
-            </Text>
-          </Box>
-        )}
-      </Group>
+      <Container fluid className="px-3 px-md-4 px-lg-5">
+        {/* Logo */}
+        <Navbar.Brand className="d-flex align-items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+          <div className="logo-icon">
+            <IconSparkles size={24} color="white" stroke={2.5} />
+          </div>
+          <span className="logo-text d-none d-md-inline">Такси Профит</span>
+        </Navbar.Brand>
 
-      {/* Navigation items */}
-      <Group gap={isMobile ? 4 : 'xs'}>
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.value
-          const Icon = item.icon
-          const isHovered = hoverStates[item.value]
+        {/* Navigation items */}
+        <Nav className="ms-auto d-flex flex-row align-items-center gap-1 gap-md-2">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.value
+            const Icon = item.icon
+            const isHovered = hoverStates[item.value]
 
-          return (
-            <UnstyledButton
-              key={item.value}
-              onClick={() => navigate(item.value)}
-              onMouseEnter={() => setHoverStates((prev) => ({ ...prev, [item.value]: true }))}
-              onMouseLeave={() => setHoverStates((prev) => ({ ...prev, [item.value]: false }))}
-              style={{
-                padding: isMobile ? '10px' : isTablet ? '10px 16px' : '12px 20px',
-                borderRadius: isMobile ? '12px' : '14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: isMobile ? 0 : '10px',
-                background: isActive
-                  ? 'linear-gradient(135deg, #12b886, #0ca678)'
-                  : isHovered
-                  ? colorScheme === 'dark'
-                    ? 'rgba(255, 255, 255, 0.05)'
-                    : 'rgba(0, 0, 0, 0.04)'
-                  : 'transparent',
-                color: isActive ? 'white' : colorScheme === 'dark' ? '#b0b0b0' : '#666',
-                fontWeight: isActive ? 700 : 600,
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: isHovered && !isActive && !isMobile ? 'translateY(-2px)' : 'translateY(0)',
-                boxShadow: isActive
-                  ? '0 8px 20px rgba(18, 184, 134, 0.35)'
-                  : isHovered && !isMobile
-                  ? colorScheme === 'dark'
-                    ? '0 4px 12px rgba(255, 255, 255, 0.05)'
-                    : '0 4px 12px rgba(0, 0, 0, 0.08)'
-                  : 'none',
-              }}
-            >
-              <Icon size={isMobile ? 20 : 22} stroke={isActive ? 2.5 : 2} />
-              {!isMobile && (
-                <Text size={isTablet ? 'sm' : 'md'} fw={isActive ? 700 : 600}>
-                  {item.label}
-                </Text>
-              )}
-            </UnstyledButton>
-          )
-        })}
+            return (
+              <div
+                key={item.value}
+                className={`nav-item-custom ${isActive ? 'active' : ''} ${isHovered ? 'hovered' : ''}`}
+                onClick={() => navigate(item.value)}
+                onMouseEnter={() => setHoverStates((prev) => ({ ...prev, [item.value]: true }))}
+                onMouseLeave={() => setHoverStates((prev) => ({ ...prev, [item.value]: false }))}
+              >
+                <Icon size={22} stroke={isActive ? 2.5 : 2} />
+                <span className="d-none d-md-inline">{item.label}</span>
+              </div>
+            )
+          })}
 
-        {/* Theme toggle button */}
-        <Box
-          onMouseEnter={() => setThemeHover(true)}
-          onMouseLeave={() => setThemeHover(false)}
-          style={{
-            marginLeft: isMobile ? '4px' : '8px',
-          }}
-        >
-          <ActionIcon
+          {/* Theme toggle button */}
+          <div
+            className={`theme-toggle-btn ${themeHover ? 'hovered' : ''}`}
             onClick={onToggleTheme}
-            size={isMobile ? 40 : 48}
-            radius={isMobile ? '12px' : '14px'}
+            onMouseEnter={() => setThemeHover(true)}
+            onMouseLeave={() => setThemeHover(false)}
             aria-label="Переключить тему"
-            style={{
-              background: themeHover
-                ? colorScheme === 'dark'
-                  ? 'linear-gradient(135deg, #fab005, #fd7e14)'
-                  : 'linear-gradient(135deg, #364fc7, #4c6ef5)'
-                : colorScheme === 'dark'
-                ? 'rgba(255, 255, 255, 0.08)'
-                : 'rgba(0, 0, 0, 0.05)',
-              color: themeHover ? 'white' : colorScheme === 'dark' ? '#b0b0b0' : '#666',
-              border: 'none',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              transform: themeHover && !isMobile ? 'translateY(-2px) rotate(15deg)' : 'translateY(0) rotate(0deg)',
-              boxShadow: themeHover && !isMobile
-                ? colorScheme === 'dark'
-                  ? '0 8px 20px rgba(253, 126, 20, 0.4)'
-                  : '0 8px 20px rgba(54, 79, 199, 0.4)'
-                : 'none',
-            }}
           >
-            {colorScheme === 'dark' ? <IconSun size={isMobile ? 20 : 22} stroke={2.5} /> : <IconMoon size={isMobile ? 20 : 22} stroke={2.5} />}
-          </ActionIcon>
-        </Box>
-      </Group>
-    </Box>
+            {colorScheme === 'dark' ? <IconSun size={22} stroke={2.5} /> : <IconMoon size={22} stroke={2.5} />}
+          </div>
+        </Nav>
+      </Container>
+    </Navbar>
   )
 }

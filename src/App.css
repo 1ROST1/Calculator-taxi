@@ -1,0 +1,24 @@
+.app-wrapper {
+  min-height: 100vh;
+}
+
+.app-main {
+  padding-top: 60px;
+  min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .app-main {
+    padding-top: 70px;
+  }
+}
+
+.light-theme {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  background-attachment: fixed;
+}
+
+.dark-theme {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  background-attachment: fixed;
+}

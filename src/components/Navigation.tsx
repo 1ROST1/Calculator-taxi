@@ -1,4 +1,5 @@
-import { Box, Group, Text, UnstyledButton, ActionIcon } from '@mantine/core'
+import { Box, Group, Text, UnstyledButton, ActionIcon, useMantineTheme } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconCalculator, IconHistory, IconSettings, IconMoon, IconSun, IconSparkles } from '@tabler/icons-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
@@ -17,13 +18,16 @@ const navItems = [
 export function Navigation({ colorScheme, onToggleTheme }: Props) {
   const navigate = useNavigate()
   const location = useLocation()
+  const theme = useMantineTheme()
+  const isMobile = useMediaQuery('(max-width: 767px)')
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)')
   const [hoverStates, setHoverStates] = useState<Record<string, boolean>>({})
   const [themeHover, setThemeHover] = useState(false)
 
   return (
     <Box
-      h={70}
-      px="xl"
+      h={isMobile ? 60 : 70}
+      px={isMobile ? 'sm' : isTablet ? 'md' : 'xl'}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -42,12 +46,12 @@ export function Navigation({ colorScheme, onToggleTheme }: Props) {
       }}
     >
       {/* Logo with gradient and icon */}
-      <Group gap="xs">
+      <Group gap={isMobile ? 6 : 'xs'}>
         <Box
           style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '14px',
+            width: isMobile ? '36px' : '44px',
+            height: isMobile ? '36px' : '44px',
+            borderRadius: isMobile ? '10px' : '14px',
             background: 'linear-gradient(135deg, #12b886 0%, #15aabf 50%, #0ca678 100%)',
             display: 'flex',
             alignItems: 'center',
@@ -55,27 +59,29 @@ export function Navigation({ colorScheme, onToggleTheme }: Props) {
             boxShadow: '0 4px 16px rgba(18, 184, 134, 0.4)',
           }}
         >
-          <IconSparkles size={24} color="white" stroke={2.5} />
+          <IconSparkles size={isMobile ? 20 : 24} color="white" stroke={2.5} />
         </Box>
-        <Box>
-          <Text
-            size="26px"
-            fw={900}
-            style={{
-              background: 'linear-gradient(135deg, #12b886 0%, #15aabf 50%, #0ca678 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              lineHeight: 1,
-            }}
-          >
-            Такси Профит
-          </Text>
-        </Box>
+        {!isMobile && (
+          <Box>
+            <Text
+              size={isTablet ? '22px' : '26px'}
+              fw={900}
+              style={{
+                background: 'linear-gradient(135deg, #12b886 0%, #15aabf 50%, #0ca678 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                lineHeight: 1,
+              }}
+            >
+              Такси Профит
+            </Text>
+          </Box>
+        )}
       </Group>
 
       {/* Navigation items */}
-      <Group gap="xs">
+      <Group gap={isMobile ? 4 : 'xs'}>
         {navItems.map((item) => {
           const isActive = location.pathname === item.value
           const Icon = item.icon
@@ -88,11 +94,11 @@ export function Navigation({ colorScheme, onToggleTheme }: Props) {
               onMouseEnter={() => setHoverStates((prev) => ({ ...prev, [item.value]: true }))}
               onMouseLeave={() => setHoverStates((prev) => ({ ...prev, [item.value]: false }))}
               style={{
-                padding: '12px 20px',
-                borderRadius: '14px',
+                padding: isMobile ? '10px' : isTablet ? '10px 16px' : '12px 20px',
+                borderRadius: isMobile ? '12px' : '14px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
+                gap: isMobile ? 0 : '10px',
                 background: isActive
                   ? 'linear-gradient(135deg, #12b886, #0ca678)'
                   : isHovered
@@ -103,20 +109,22 @@ export function Navigation({ colorScheme, onToggleTheme }: Props) {
                 color: isActive ? 'white' : colorScheme === 'dark' ? '#b0b0b0' : '#666',
                 fontWeight: isActive ? 700 : 600,
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: isHovered && !isActive ? 'translateY(-2px)' : 'translateY(0)',
+                transform: isHovered && !isActive && !isMobile ? 'translateY(-2px)' : 'translateY(0)',
                 boxShadow: isActive
                   ? '0 8px 20px rgba(18, 184, 134, 0.35)'
-                  : isHovered
+                  : isHovered && !isMobile
                   ? colorScheme === 'dark'
                     ? '0 4px 12px rgba(255, 255, 255, 0.05)'
                     : '0 4px 12px rgba(0, 0, 0, 0.08)'
                   : 'none',
               }}
             >
-              <Icon size={22} stroke={isActive ? 2.5 : 2} />
-              <Text size="md" fw={isActive ? 700 : 600}>
-                {item.label}
-              </Text>
+              <Icon size={isMobile ? 20 : 22} stroke={isActive ? 2.5 : 2} />
+              {!isMobile && (
+                <Text size={isTablet ? 'sm' : 'md'} fw={isActive ? 700 : 600}>
+                  {item.label}
+                </Text>
+              )}
             </UnstyledButton>
           )
         })}
@@ -126,13 +134,13 @@ export function Navigation({ colorScheme, onToggleTheme }: Props) {
           onMouseEnter={() => setThemeHover(true)}
           onMouseLeave={() => setThemeHover(false)}
           style={{
-            marginLeft: '8px',
+            marginLeft: isMobile ? '4px' : '8px',
           }}
         >
           <ActionIcon
             onClick={onToggleTheme}
-            size={48}
-            radius="14px"
+            size={isMobile ? 40 : 48}
+            radius={isMobile ? '12px' : '14px'}
             aria-label="Переключить тему"
             style={{
               background: themeHover
@@ -145,15 +153,15 @@ export function Navigation({ colorScheme, onToggleTheme }: Props) {
               color: themeHover ? 'white' : colorScheme === 'dark' ? '#b0b0b0' : '#666',
               border: 'none',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              transform: themeHover ? 'translateY(-2px) rotate(15deg)' : 'translateY(0) rotate(0deg)',
-              boxShadow: themeHover
+              transform: themeHover && !isMobile ? 'translateY(-2px) rotate(15deg)' : 'translateY(0) rotate(0deg)',
+              boxShadow: themeHover && !isMobile
                 ? colorScheme === 'dark'
                   ? '0 8px 20px rgba(253, 126, 20, 0.4)'
                   : '0 8px 20px rgba(54, 79, 199, 0.4)'
                 : 'none',
             }}
           >
-            {colorScheme === 'dark' ? <IconSun size={22} stroke={2.5} /> : <IconMoon size={22} stroke={2.5} />}
+            {colorScheme === 'dark' ? <IconSun size={isMobile ? 20 : 22} stroke={2.5} /> : <IconMoon size={isMobile ? 20 : 22} stroke={2.5} />}
           </ActionIcon>
         </Box>
       </Group>

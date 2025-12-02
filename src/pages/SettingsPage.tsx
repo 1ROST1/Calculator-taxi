@@ -1,19 +1,22 @@
 import { Container, Stack, Text, Paper, Switch, Group, Button, Box, Divider, NumberInput } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconMoon, IconSun, IconPalette, IconMoneybag, IconEye, IconSettings } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { useState } from 'react'
 
 export function SettingsPage() {
   const { settings, updateSettings } = useSettings()
+  const isMobile = useMediaQuery('(max-width: 767px)')
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)')
   const [hoverStates, setHoverStates] = useState<Record<string, boolean>>({})
 
   return (
-    <Container size="md" p="lg">
-      <Stack gap="xl">
+    <Container size="md" p={isMobile ? 'sm' : isTablet ? 'md' : 'lg'}>
+      <Stack gap={isMobile ? 'lg' : 'xl'}>
         {/* Gradient Header */}
         <Box className="animate-fade-in">
           <Text
-            size="42px"
+            size={isMobile ? '28px' : isTablet ? '36px' : '42px'}
             fw={900}
             mb={8}
             style={{

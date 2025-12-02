@@ -1,4 +1,5 @@
 import { AppShell, MantineProvider, createTheme } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { Notifications } from '@mantine/notifications'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { CalculatorPage } from './pages/CalculatorPage'
@@ -10,6 +11,7 @@ import { useSettings } from './hooks/useSettings'
 
 export function App() {
   const { settings, updateSettings } = useSettings()
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   const theme = createTheme({
     primaryColor: settings.accentColor,
@@ -107,11 +109,11 @@ export function App() {
       <Notifications position="top-center" limit={1} autoClose={2000} />
       <BrowserRouter>
         <AppShell
-          header={{ height: 70 }}
+          header={{ height: isMobile ? 60 : 70 }}
           padding={0}
           styles={{
             main: {
-              paddingTop: 70,
+              paddingTop: isMobile ? 60 : 70,
             },
           }}
         >

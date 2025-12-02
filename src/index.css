@@ -150,3 +150,81 @@ html[data-mantine-color-scheme='dark'] .glass-card {
 html[data-mantine-color-scheme='dark'] .hover-lift:hover {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
+
+/* Адаптивность под разные устройства */
+/* Mobile-first подход */
+
+/* Базовые стили для мобильных (до 768px) */
+@media (max-width: 767px) {
+  :root {
+    font-size: 14px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Компактные отступы на мобильных */
+  .mobile-compact {
+    padding: 12px !important;
+  }
+
+  /* Скрываем текст на мобильных для навигации */
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  /* Уменьшаем размеры карточек */
+  .glass-card {
+    padding: 16px !important;
+  }
+
+  /* Стек вместо Grid на мобильных */
+  .responsive-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Планшеты (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    font-size: 15px;
+  }
+
+  .tablet-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  :root {
+    font-size: 16px;
+  }
+
+  .desktop-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Touch устройства */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  .hover-lift,
+  a {
+    /* Увеличенная область нажатия для сенсорных экранов */
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Убираем hover эффекты на touch устройствах */
+  .hover-lift:hover {
+    transform: none;
+  }
+}

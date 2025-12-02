@@ -10,6 +10,7 @@ import {
   Container,
   UnstyledButton,
 } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import {
   IconPlus,
@@ -32,6 +33,8 @@ import type { OrderInput, DayExtras, DayRecord } from '../types'
 
 export function CalculatorPage() {
   const { settings } = useSettings()
+  const isMobile = useMediaQuery('(max-width: 767px)')
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)')
   const [orders, setOrders] = useState<OrderInput[]>([])
   const [date] = useState(dayjs().format('YYYY-MM-DD'))
   const [amount, setAmount] = useState('')
@@ -120,14 +123,14 @@ export function CalculatorPage() {
         background: 'transparent',
       }}
     >
-      <Container size="md" p="lg">
-        <Stack gap={32}>
+      <Container size="md" p={isMobile ? 'sm' : isTablet ? 'md' : 'lg'}>
+        <Stack gap={isMobile ? 20 : isTablet ? 24 : 32}>
           {/* Header */}
           <Box className="animate-fade-in">
             <Text
-              size="42px"
+              size={isMobile ? '28px' : isTablet ? '36px' : '42px'}
               fw={900}
-              mb={8}
+              mb={isMobile ? 4 : 8}
               style={{
                 background: 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)',
                 WebkitBackgroundClip: 'text',
@@ -151,8 +154,8 @@ export function CalculatorPage() {
             style={{
               position: 'relative',
               overflow: 'hidden',
-              borderRadius: '24px',
-              padding: '32px',
+              borderRadius: isMobile ? '16px' : isTablet ? '20px' : '24px',
+              padding: isMobile ? '20px' : isTablet ? '24px' : '32px',
               background:
                 totals.netProfit >= 0
                   ? 'linear-gradient(135deg, #12b886 0%, #0ca678 50%, #099268 100%)'
@@ -203,7 +206,7 @@ export function CalculatorPage() {
               </Group>
 
               <Text
-                size="64px"
+                size={isMobile ? '36px' : isTablet ? '48px' : '64px'}
                 fw={900}
                 lh={1}
                 style={{
@@ -216,12 +219,12 @@ export function CalculatorPage() {
                 {formatCurrency(totals.netProfit)}
               </Text>
 
-              <Group gap={40} mt={16}>
+              <Group gap={isMobile ? 16 : isTablet ? 24 : 40} mt={isMobile ? 12 : 16} wrap={isMobile ? 'wrap' : 'nowrap'} justify="center">
                 <Box ta="center">
                   <Text size="xs" fw={600} tt="uppercase" lts={1} style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                     Выручка
                   </Text>
-                  <Text size="xl" fw={800} style={{ color: '#ffffff' }}>
+                  <Text size={isMobile ? 'lg' : 'xl'} fw={800} style={{ color: '#ffffff' }}>
                     {formatCurrency(totals.gross)}
                   </Text>
                 </Box>
@@ -229,7 +232,7 @@ export function CalculatorPage() {
                   <Text size="xs" fw={600} tt="uppercase" lts={1} style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                     Заказов
                   </Text>
-                  <Text size="xl" fw={800} style={{ color: '#ffffff' }}>
+                  <Text size={isMobile ? 'lg' : 'xl'} fw={800} style={{ color: '#ffffff' }}>
                     {orders.length}
                   </Text>
                 </Box>
@@ -237,7 +240,7 @@ export function CalculatorPage() {
                   <Text size="xs" fw={600} tt="uppercase" lts={1} style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                     Расходы
                   </Text>
-                  <Text size="xl" fw={800} style={{ color: '#ffffff' }}>
+                  <Text size={isMobile ? 'lg' : 'xl'} fw={800} style={{ color: '#ffffff' }}>
                     {formatCurrency(totals.extrasTotal)}
                   </Text>
                 </Box>
@@ -246,12 +249,12 @@ export function CalculatorPage() {
           </Box>
 
           {/* Payment Stats */}
-          <Group grow className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <Stack gap={isMobile ? 12 : 16} className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
             <Box
               className="glass-card hover-lift"
               style={{
-                borderRadius: '20px',
-                padding: '20px',
+                borderRadius: isMobile ? '16px' : '20px',
+                padding: isMobile ? '16px' : '20px',
                 border: '2px solid rgba(18, 184, 134, 0.2)',
               }}
             >
@@ -284,8 +287,8 @@ export function CalculatorPage() {
             <Box
               className="glass-card hover-lift"
               style={{
-                borderRadius: '20px',
-                padding: '20px',
+                borderRadius: isMobile ? '16px' : '20px',
+                padding: isMobile ? '16px' : '20px',
                 border: '2px solid rgba(34, 139, 230, 0.2)',
               }}
             >
@@ -314,14 +317,14 @@ export function CalculatorPage() {
                 </Box>
               </Group>
             </Box>
-          </Group>
+          </Stack>
 
           {/* Add Order Section */}
           <Box
             className="glass-card animate-fade-in"
             style={{
-              borderRadius: '24px',
-              padding: '32px',
+              borderRadius: isMobile ? '16px' : isTablet ? '20px' : '24px',
+              padding: isMobile ? '20px' : isTablet ? '24px' : '32px',
               animationDelay: '0.2s',
             }}
           >
@@ -452,8 +455,8 @@ export function CalculatorPage() {
             <Box
               className="glass-card animate-fade-in"
               style={{
-                borderRadius: '24px',
-                padding: '32px',
+                borderRadius: isMobile ? '16px' : isTablet ? '20px' : '24px',
+                padding: isMobile ? '20px' : isTablet ? '24px' : '32px',
                 animationDelay: '0.3s',
               }}
             >
@@ -557,16 +560,17 @@ export function CalculatorPage() {
           )}
 
           {/* Action Buttons */}
-          <Group grow className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <Stack gap={isMobile ? 12 : 0} className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <Button
-              size="xl"
-              leftSection={<IconDeviceFloppy size={24} />}
+              size={isMobile ? 'lg' : 'xl'}
+              fullWidth
+              leftSection={<IconDeviceFloppy size={isMobile ? 20 : 24} />}
               onClick={handleSaveDay}
               disabled={!orders.length}
               style={{
-                height: '64px',
-                borderRadius: '16px',
-                fontSize: '18px',
+                height: isMobile ? '56px' : '64px',
+                borderRadius: isMobile ? '14px' : '16px',
+                fontSize: isMobile ? '16px' : '18px',
                 fontWeight: 700,
                 background: orders.length
                   ? 'linear-gradient(135deg, #12b886 0%, #0ca678 100%)'
@@ -591,16 +595,17 @@ export function CalculatorPage() {
               Сохранить смену
             </Button>
             <Button
-              size="xl"
-              leftSection={<IconMinus size={24} />}
+              size={isMobile ? 'lg' : 'xl'}
+              fullWidth
+              leftSection={<IconMinus size={isMobile ? 20 : 24} />}
               variant="light"
               color="gray"
               onClick={() => setOrders([])}
               disabled={!orders.length}
               style={{
-                height: '64px',
-                borderRadius: '16px',
-                fontSize: '18px',
+                height: isMobile ? '56px' : '64px',
+                borderRadius: isMobile ? '14px' : '16px',
+                fontSize: isMobile ? '16px' : '18px',
                 fontWeight: 700,
                 transition: 'all 0.3s ease',
               }}
@@ -617,7 +622,7 @@ export function CalculatorPage() {
             >
               Очистить
             </Button>
-          </Group>
+          </Stack>
         </Stack>
       </Container>
     </Box>

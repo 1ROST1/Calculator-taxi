@@ -13,6 +13,7 @@ import {
   Divider,
   UnstyledButton,
 } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import {
   IconTrash,
   IconEye,
@@ -29,6 +30,8 @@ import { deleteDay, listDays } from '../lib/db'
 import type { DayRecord } from '../types'
 
 export function HistoryPage() {
+  const isMobile = useMediaQuery('(max-width: 767px)')
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)')
   const [days, setDays] = useState<DayRecord[]>([])
   const [selected, setSelected] = useState<DayRecord | null>(null)
   const [hoverStates, setHoverStates] = useState<Record<string, boolean>>({})
@@ -63,14 +66,14 @@ export function HistoryPage() {
   }
 
   return (
-    <Container size="md" p="lg">
-      <Stack gap="xl">
+    <Container size="md" p={isMobile ? 'sm' : isTablet ? 'md' : 'lg'}>
+      <Stack gap={isMobile ? 'lg' : 'xl'}>
         {/* Gradient Header */}
         <Box className="animate-fade-in">
           <Text
-            size="42px"
+            size={isMobile ? '28px' : isTablet ? '36px' : '42px'}
             fw={900}
-            mb={8}
+            mb={isMobile ? 4 : 8}
             style={{
               background: 'linear-gradient(135deg, #12b886 0%, #15aabf 50%, #228be6 100%)',
               WebkitBackgroundClip: 'text',
